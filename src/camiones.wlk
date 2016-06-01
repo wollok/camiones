@@ -9,7 +9,7 @@ import cosos.*
  * http://pdep.com.ar/material/guas-de-ejercicios
  *  
  * WORK IN PROGRESS!!!
- * TODO: Puntos desde F en adelante (hasta M).
+ * TODO: Puntos desde G en adelante (hasta M).
  */
 
 /**
@@ -17,8 +17,8 @@ import cosos.*
  */
 class Camion {
 	const minimoBienCargado = 0.75
-	var cosos = []
-	var capacidadMaxima = 200
+	const cosos = []
+	var capacidadMaxima
 	var estado = disponible
 	
 	constructor(unaCapacidad) {
@@ -69,4 +69,7 @@ class Camion {
 	method listoParaPartir() = estado.listoParaPartir(self)
 	method bienCargado() = 
 		self.pesoCargado() >= self.capacidadMaxima() * minimoBienCargado
+
+	method estaViajando() = estado == enViaje
+	method totalCarga() = cosos.sum({unCoso => unCoso.peso()})
 }
