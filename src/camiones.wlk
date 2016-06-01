@@ -14,13 +14,16 @@ import cosos.*
 
 /**
  * Un camión básico.
- * TODO: Posibilidad de muchos camiones.
  */
-object camion {
+class Camion {
 	const minimoBienCargado = 0.75
 	var cosos = []
 	var capacidadMaxima = 200
 	var estado = disponible
+	
+	constructor(unaCapacidad) {
+		capacidadMaxima = unaCapacidad
+	}
 	
 	/* Getters */
 	method cosos() = cosos
@@ -31,9 +34,7 @@ object camion {
 		estado = unEstado
 	}
 	
-	/** Ejercicios A + C
-	 *  TODO: Implementar los distintos "cosos" posibles en cosos.wlk.	
-	 */
+	/** Ejercicios A + C */
 	method cargar(unCoso){
 		if(estado.puedeCargar(self, unCoso))
 			cosos.add(unCoso)
