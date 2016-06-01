@@ -67,3 +67,12 @@ test "Saber si un camión está listo para partir" {
 	camion.pasarAReparacion()
 	assert.notThat(camion.listoParaPartir())	// no disponible, no está listo	
 }
+
+test "Cantidad de carga que está viajando de un depósito" {
+	assert.equals(0,deposito.totalCargaViajando())
+	deposito.agregarCamion(camion)
+	camion.cargar(caja)
+	assert.equals(0,deposito.totalCargaViajando()) // Se cargó, pero no está viajando
+	camion.salirDeViaje()
+	assert.equals(caja.peso(), deposito.totalCargaViajando()) // Se cargó y salió de viaje
+}
