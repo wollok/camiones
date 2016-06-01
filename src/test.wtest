@@ -1,0 +1,59 @@
+import camiones.*
+import cosos.*
+
+/**
+ * El camión tiene una capacidad máxima en peso. Si el peso del coso a cargar 
+ * agregado al peso de la carga actual es menor a esa capacidad, debe poder cargar. 
+ * Caso contrario, se debe impedir la carga.
+ */
+test "Saber si un camión puede cargar un coso" {
+	/* El camión tiene 200 de capacidad y cada coso pesa 50. Puedo cargar 4. */
+	4.times({ 
+		assert.that(camion.puedeCargar(coso))
+		camion.cargar(coso)
+	})
+	/* El quinto coso ya no puede cargarse. */
+	assert.notThat(camion.puedeCargar(coso))
+	/* Si intento cargarlo, se lanza una excepción. */
+	assert.throwsException({ camion.cargar(coso) })
+}
+
+/**
+ * El camión puede cambiar desde o (excluyente) hacia el estado "disponible" únicamente. 
+ * Cualquier otra transición debe impedirse.
+ * TODO: Tal vez convenga subdividir el test.
+ */
+test "Camión sólo permite cambios de estado válidos" {	
+	/* Disponible: Puede PASAR A REPARACIÓN o salir de viaje. */
+	assert.throwsException({camion.volverDeViaje()})
+	assert.throwsException({camion.salirDeReparacion()})
+	camion.pasarAReparacion()	// disponible	-> enReparacion
+	
+	/* En reparación: Sólo puede SALIR DE REPARACIÓN. */
+	assert.throwsException({camion.pasarAReparacion()})
+	assert.throwsException({camion.salirDeViaje()})
+	assert.throwsException({camion.volverDeViaje()})
+	camion.salirDeReparacion()	// enReparacion	-> disponible
+	
+	/* Disponible: Puede pasar a reparación o SALIR DE VIAJE. */
+	camion.salirDeViaje()		// disponible	-> enViaje
+	
+	/* De viaje: Sólo permite VOLVER DE VIAJE */
+	assert.throwsException({camion.pasarAReparacion()})
+	assert.throwsException({camion.salirDeReparacion()})
+	assert.throwsException({camion.salirDeViaje()})
+	camion.volverDeViaje()		// enViaje		-> disponible
+}
+
+/**
+ * El camión está listo al estar disponible y alcanzar el 75% de carga 
+ * respecto de su carga máxima.
+ */
+test "Saber si un camión está listo para partir" {
+	2.times({ camion.cargar(coso) })
+	assert.notThat(camion.listoParaPartir())	// < 75% carga, no está listo
+	camion.cargar(coso)
+	assert.that(camion.listoParaPartir()) 		// >= 75% carga y disponible, está listo
+	camion.pasarAReparacion()
+	assert.notThat(camion.listoParaPartir())	// no disponible, no está listo	
+}
