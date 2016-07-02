@@ -22,7 +22,7 @@ class Deposito {
 	method conjuntoDeCososCon(otroDeposito)  {
 		var elementosEnComun = self.obtenerElementosEnComunCon(otroDeposito)
 		var union = utils.union(self.obtenerCosasSegunElementosEnComun(elementosEnComun),otroDeposito.obtenerCosasSegunElementosEnComun(elementosEnComun))
-		return union.sortedBy({unCoso, otroCoso => unCoso.peso() > otroCoso.peso()})
+		return union.sortedBy({unCoso, otroCoso => unCoso.peso() < otroCoso.peso()})
 	}
 	method obtenerCosasSegunElementosEnComun(elementosEnComun) = 
 		self.obtenerCososDeposito().filter({unCoso => elementosEnComun.contains(unCoso.elemento())})
