@@ -10,7 +10,6 @@ import utils.*
  * http://pdep.com.ar/material/guas-de-ejercicios
  *  
  * WORK IN PROGRESS!!!
- * TODO: Puntos desde G en adelante (hasta M).
  */
 
 /**
