@@ -1,5 +1,6 @@
 import estados.*
-import cosos.* 
+import cosos.*
+import utils.* 
 
 /**
  * Paradigmas de Programación - UTN - FRBA
@@ -72,4 +73,15 @@ class Camion {
 
 	method estaViajando() = estado == enViaje
 	method totalCarga() = cosos.sum({unCoso => unCoso.peso()})
+	
+	/** Ejercicio G */
+	method elementosCargados() = cosos.map({unCoso => unCoso.elemento()})
+	
+	/** Ejercicio I */
+	method contienenAmbos(otroCamion) = utils.intersection(self.elementosCargados(), otroCamion.elementosCargados())
+	
+	/** Ejercicio J */
+	method elementoMasLivianoTransportado() = cosos.min({unCoso => unCoso.peso()})	
+	
+	
 }

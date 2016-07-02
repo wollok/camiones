@@ -9,6 +9,8 @@ class Coso {
 		elemento = unElemento
 	}
 	
+	method elemento() = elemento
+	
 	method peso()
 }
 
