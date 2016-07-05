@@ -75,20 +75,19 @@ test "Cantidad de carga que está viajando de un depósito" {
 	assert.equals(0,deposito.totalCargaViajando()) // Se cargó, pero no está viajando
 	camion.salirDeViaje()
 	assert.equals(caja.peso(), deposito.totalCargaViajando()) // Se cargó y salió de viaje
-		
 }
-
+ 
 test "Un camión lleva 1 ketchup y 1 aceite" {
 	camion.cargar(caja)
-	camion.cargar(bidon)
-	assert.equals(2, camion.elementosCargados().size()) //TODO: ver de testear con una colección literal, y no con size
+	camion.cargar(bidon) 
+	assert.equals(#{"Ketchup", "Aceite"}, camion.elementos())
 }
 
 test "De dos camiones que tiene el depósito, en uno solo se carga ketchup" {
 	deposito.agregarCamion(camion)
 	deposito.agregarCamion(otroCamion)
 	camion.cargar(caja)
-	otroCamion.cargar(bidon)
+	otroCamion.cargar(bidon) 
 	assert.equals(1, deposito.seEstaCargando("Ketchup").size())
 }
 
@@ -115,12 +114,13 @@ test "De dos camiones, el camión con dos cajas y un bidón, transporta más que el
 	assert.equals(otroCamion, deposito.transportaMayorCantidadDeCosos())
 }
 
-test "Cosas en común entre dos depósitos" {
+test "Cosas en común entre dos depósitos, en orden ascendente por peso" {
 	deposito.agregarCamion(camion)
 	otroDeposito.agregarCamion(otroCamion)
 	camion.cargar(caja)
+	camion.cargar(bidon)
+	otroCamion.cargar(caja)
 	otroCamion.cargar(bidon)
 	otroCamion.cargar(bulto)
-	assert.equals(2, deposito.conjuntoDeCososCon(otroDeposito).size())
-	
+	assert.equals(["Aceite", "Ketchup"], deposito.elementosEnComunCon(otroDeposito))
 }
