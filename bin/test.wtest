@@ -1,21 +1,31 @@
-import camiones.*
-import cosos.*
+import objetosDeEjemplo.*
+ 
+/**
+ * El peso de una caja se conoce para cada caja (realmente no haría falta testear un getter)
+ * El peso de un bulto es la cantidad de cajas (todas iguales) * el peso de una.
+ * El peso de un bidón es su densidad por su capacidad.
+ */
+test "Pesos de los distintos \"cosos\"" {
+	assert.equals(50, caja.peso())		// 50 Kg.
+	assert.equals(400, bulto.peso())	// 10 cajas de 40 Kg. c/u
+	assert.equals(7, bidon.peso())		// 10 litros con densidad de 0.7 Kg./l
+}
 
 /**
- * El camión tiene una capacidad máxima en peso. Si el peso del coso a cargar 
+ * El camión tiene una capacidad máxima en peso. Si el peso del caja a cargar 
  * agregado al peso de la carga actual es menor a esa capacidad, debe poder cargar. 
  * Caso contrario, se debe impedir la carga.
  */
-test "Saber si un camión puede cargar un coso" {
-	/* El camión tiene 200 de capacidad y cada coso pesa 50. Puedo cargar 4. */
+test "Saber si un camión puede cargar un caja" {
+	/* El camión tiene 200 de capacidad y cada caja pesa 50. Puedo cargar 4. */
 	4.times({ 
-		assert.that(camion.puedeCargar(coso))
-		camion.cargar(coso)
+		assert.that(camion.puedeCargar(caja))
+		camion.cargar(caja)
 	})
-	/* El quinto coso ya no puede cargarse. */
-	assert.notThat(camion.puedeCargar(coso))
+	/* El quinto caja ya no puede cargarse. */
+	assert.notThat(camion.puedeCargar(caja))
 	/* Si intento cargarlo, se lanza una excepción. */
-	assert.throwsException({ camion.cargar(coso) })
+	assert.throwsException({ camion.cargar(caja) })
 }
 
 /**
@@ -50,10 +60,67 @@ test "Camión sólo permite cambios de estado válidos" {
  * respecto de su carga máxima.
  */
 test "Saber si un camión está listo para partir" {
-	2.times({ camion.cargar(coso) })
+	2.times({ camion.cargar(caja) })
 	assert.notThat(camion.listoParaPartir())	// < 75% carga, no está listo
-	camion.cargar(coso)
+	camion.cargar(caja)
 	assert.that(camion.listoParaPartir()) 		// >= 75% carga y disponible, está listo
 	camion.pasarAReparacion()
 	assert.notThat(camion.listoParaPartir())	// no disponible, no está listo	
+}
+
+test "Cantidad de carga que está viajando de un depósito" {
+	assert.equals(0,deposito.totalCargaViajando())
+	deposito.agregarCamion(camion)
+	camion.cargar(caja)
+	assert.equals(0,deposito.totalCargaViajando()) // Se cargó, pero no está viajando
+	camion.salirDeViaje()
+	assert.equals(caja.peso(), deposito.totalCargaViajando()) // Se cargó y salió de viaje
+		
+}
+
+test "Un camión lleva 1 ketchup y 1 aceite" {
+	camion.cargar(caja)
+	camion.cargar(bidon)
+	assert.equals(2, camion.elementosCargados().size()) //TODO: ver de testear con una colección literal, y no con size
+}
+
+test "De dos camiones que tiene el depósito, en uno solo se carga ketchup" {
+	deposito.agregarCamion(camion)
+	deposito.agregarCamion(otroCamion)
+	camion.cargar(caja)
+	otroCamion.cargar(bidon)
+	assert.equals(1, deposito.seEstaCargando("Ketchup").size())
+}
+
+test "El conjunto de elementos cargados entre dos camiones, es ketchup" {
+	camion.cargar(caja)
+	otroCamion.cargar(caja)
+	otroCamion.cargar(bidon)
+	assert.equals(1, camion.contienenAmbos(otroCamion).size())
+}
+
+test "El coso más liviano de un camión es el bidón con aceite" {
+	camion.cargar(caja)
+	camion.cargar(bidon)
+	assert.equals(bidon, camion.elementoMasLivianoTransportado())
+}
+
+test "De dos camiones, el camión con dos cajas y un bidón, transporta más que el que tiene sólo una caja" {
+	deposito.agregarCamion(camion)
+	deposito.agregarCamion(otroCamion)
+	camion.cargar(caja)
+	otroCamion.cargar(bidon)
+	otroCamion.cargar(caja)
+	otroCamion.cargar(caja)
+	assert.equals(otroCamion, deposito.transportaMayorCantidadDeCosos())
+}
+
+test "Cosas en común entre dos depósitos" {
+	deposito.agregarCamion(camion)
+	otroDeposito.agregarCamion(otroCamion)
+	camion.cargar(caja)
+	otroCamion.cargar(bidon)
+	otroCamion.cargar(bulto)
+	assert.equals(2, deposito.conjuntoDeCososCon(otroDeposito).size())
+	
 }

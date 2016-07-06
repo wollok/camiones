@@ -1,5 +1,6 @@
 import estados.*
-import cosos.* 
+import cosos.*
+import utils.* 
 
 /**
  * Paradigmas de Programación - UTN - FRBA
@@ -9,18 +10,20 @@ import cosos.*
  * http://pdep.com.ar/material/guas-de-ejercicios
  *  
  * WORK IN PROGRESS!!!
- * TODO: Puntos desde F en adelante (hasta M).
  */
 
 /**
  * Un camión básico.
- * TODO: Posibilidad de muchos camiones.
  */
-object camion {
+class Camion {
 	const minimoBienCargado = 0.75
-	var cosos = []
-	var capacidadMaxima = 200
+	const cosos = []
+	var capacidadMaxima
 	var estado = disponible
+	
+	constructor(unaCapacidad) {
+		capacidadMaxima = unaCapacidad
+	}
 	
 	/* Getters */
 	method cosos() = cosos
@@ -31,9 +34,7 @@ object camion {
 		estado = unEstado
 	}
 	
-	/** Ejercicios A + C
-	 *  TODO: Implementar los distintos "cosos" posibles en cosos.wlk.	
-	 */
+	/** Ejercicios A + C */
 	method cargar(unCoso){
 		if(estado.puedeCargar(self, unCoso))
 			cosos.add(unCoso)
@@ -68,4 +69,18 @@ object camion {
 	method listoParaPartir() = estado.listoParaPartir(self)
 	method bienCargado() = 
 		self.pesoCargado() >= self.capacidadMaxima() * minimoBienCargado
+
+	method estaViajando() = estado == enViaje
+	method totalCarga() = cosos.sum({unCoso => unCoso.peso()})
+	
+	/** Ejercicio G */
+	method elementosCargados() = cosos.map({unCoso => unCoso.elemento()})
+	
+	/** Ejercicio I */
+	method contienenAmbos(otroCamion) = utils.intersection(self.elementosCargados(), otroCamion.elementosCargados())
+	
+	/** Ejercicio J */
+	method elementoMasLivianoTransportado() = cosos.min({unCoso => unCoso.peso()})	
+	
+	
 }
