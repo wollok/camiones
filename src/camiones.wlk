@@ -1,5 +1,5 @@
 import estados.*
-import cosos.*
+import cosos.* 
 
 /**
  * Paradigmas de Programación - UTN - FRBA
