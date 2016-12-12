@@ -40,7 +40,7 @@ class Camion {
 	 * Por ejemplo, si a un camión con capacidad para 150 Kg. que ya tenia 140 Kg. se le pide 
 	 * que cargue un bulto de 10 Kg. lo haga, pero si se pide que cargue un bidón de 25 Kg.
 	 * no lo haga, porque con este superaría su capacidad máxima. 
-	 * */
+	 */
 	method cargar(unCoso){
 		if(estado.puedeCargar(self, unCoso))
 			cosos.add(unCoso)
@@ -108,7 +108,7 @@ class Camion {
 	
 	/** <b>Ejercicio G</b><br> 
 	 * Saber los elementos que están cargados en un determinado camión 
-	 * */
+	 */
 	method elementos() = cosos.map({unCoso => unCoso.elemento()}).asSet() 
 	
 	/** <b>Ejercicio I</b><br>  

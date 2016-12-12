@@ -6,7 +6,7 @@ class NoPuedeRealizarAccion inherits wollok.lang.Exception{
 }
 
 /**
- * Estado genérico. Comportamiento por defecto para los estados concretos.
+ * Estado genérico. Sólo se incluye el comportamiento por defecto para los estados concretos.
  */
 class Estado{
 	/* En algunos puntos se necesita consultar el estado. 
